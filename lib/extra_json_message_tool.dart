@@ -9,7 +9,7 @@ List<String> getArgs(Iterable<Match> allMatch, String defaultArg) {
   }
 
   for (Match match in allMatch) {
-    String arg = match.input.substring(match.start + 2, match.end - 1);
+    String arg = match.input.substring(match.start + 1, match.end - 1);
     if (!args.contains(arg)) {
       args.add(arg);
     }
