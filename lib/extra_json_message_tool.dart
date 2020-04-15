@@ -98,7 +98,7 @@ String extraArgsFromMessage(String message) {
     if (i != 0) {
       builder.write(', ');
     }
-    builder.write(args[i]);
+    builder.write('\$${args[i]}');
   }
   return builder.toString();
 }
