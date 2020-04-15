@@ -1,4 +1,4 @@
-RegExp ARG_REG_EXP = RegExp(r'\${\w+}');
+RegExp ARG_REG_EXP = RegExp(r'\{\w+}');
 const String DEFAULT_PLURAL_ARGS = 'howMany';
 const String DEFAULT_GENDER_ARG = 'targetGender';
 
