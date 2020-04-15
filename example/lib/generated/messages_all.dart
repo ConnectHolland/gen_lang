@@ -10,9 +10,11 @@ import 'package:intl/src/intl_helpers.dart';
 final _$ja = $ja();
 
 class $ja extends MessageLookupByLibrary {
-  get localeName => 'ja';
+  @override
+  String get localeName => 'ja';
   
-  final messages = {
+  @override
+  final Map<String, dynamic> messages = {
 		"genderMessage" : (targetGender, name) => "${Intl.genderLogic(targetGender, male: "こんにちは${name}、彼は男です。", female: "こんにちは${name}、彼女は女性です。", other: "こんにちは${name}、彼/彼女は男性/女性です。")}",
 		"locale" : MessageLookupByLibrary.simpleMessage("日文"),
 		"messageWithParams" : (yourName) => "こんにちは${yourName}、ようこそ。",
@@ -26,9 +28,11 @@ class $ja extends MessageLookupByLibrary {
 final _$zh_TW = $zh_TW();
 
 class $zh_TW extends MessageLookupByLibrary {
-  get localeName => 'zh_TW';
+  @override
+  String get localeName => 'zh_TW';
   
-  final messages = {
+  @override
+  final Map<String, dynamic> messages = {
 		"genderMessage" : (targetGender, name) => "${Intl.genderLogic(targetGender, male: "你好 ${name}，他是男。", female: "你好 ${name}，她是女。", other: "你好 ${name}，他/她是男/女。")}",
 		"locale" : MessageLookupByLibrary.simpleMessage("中文"),
 		"messageWithParams" : (yourName) => "你好 ${yourName}，歡迎你。",
@@ -42,9 +46,11 @@ class $zh_TW extends MessageLookupByLibrary {
 final _$en = $en();
 
 class $en extends MessageLookupByLibrary {
-  get localeName => 'en';
+  @override
+  String get localeName => 'en';
   
-  final messages = {
+  @override
+  final Map<String, dynamic> messages = {
 		"genderMessage" : (targetGender, name) => "${Intl.genderLogic(targetGender, male: "Hi ${name}, He is boy.", female: "Hi ${name}, She is girl.", other: "Hi ${name}, he/she is boy/girl.")}",
 		"locale" : MessageLookupByLibrary.simpleMessage("English"),
 		"messageWithParams" : (yourName) => "Hi ${yourName}, Welcome you!",
@@ -57,7 +63,7 @@ class $en extends MessageLookupByLibrary {
 
 
 
-typedef Future<dynamic> LibraryLoader();
+typedef LibraryLoader = Future<dynamic> Function();
 Map<String, LibraryLoader> _deferredLibraries = {
 	"ja": () => Future.value(null),
 	"zh_TW": () => Future.value(null),
@@ -65,7 +71,7 @@ Map<String, LibraryLoader> _deferredLibraries = {
 
 };
 
-MessageLookupByLibrary _findExact(localeName) {
+MessageLookupByLibrary _findExact(String localeName) {
   switch (localeName) {
     case "ja":
         return _$ja;
@@ -81,14 +87,14 @@ MessageLookupByLibrary _findExact(localeName) {
 
 /// User programs should call this before using [localeName] for messages.
 Future<bool> initializeMessages(String localeName) async {
-  var availableLocale = Intl.verifiedLocale(
+  final availableLocale = Intl.verifiedLocale(
       localeName,
           (locale) => _deferredLibraries[locale] != null,
       onFailure: (_) => null);
   if (availableLocale == null) {
     return Future.value(false);
   }
-  var lib = _deferredLibraries[availableLocale];
+  final lib = _deferredLibraries[availableLocale];
   await (lib == null ? Future.value(false) : lib());
 
   initializeInternalMessageLookup(() => CompositeMessageLookup());
@@ -105,8 +111,8 @@ bool _messagesExistFor(String locale) {
   }
 }
 
-MessageLookupByLibrary _findGeneratedMessagesFor(locale) {
-  var actualLocale = Intl.verifiedLocale(locale, _messagesExistFor,
+MessageLookupByLibrary _findGeneratedMessagesFor(String locale) {
+  final actualLocale = Intl.verifiedLocale(locale, _messagesExistFor,
       onFailure: (_) => null);
   if (actualLocale == null) return null;
   return _findExact(actualLocale);

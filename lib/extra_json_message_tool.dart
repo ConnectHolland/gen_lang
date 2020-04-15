@@ -1,4 +1,5 @@
-RegExp ARG_REG_EXP = RegExp(r'\{\w+}');
+RegExp ARG_REG_EXP = RegExp(r'\$?{(\w+)}');
+RegExp ARG_REPLACE_REG_EXP = RegExp(r'(?<!\$){\w+}');
 const String DEFAULT_PLURAL_ARGS = 'howMany';
 const String DEFAULT_GENDER_ARG = 'targetGender';
 
@@ -9,7 +10,7 @@ List<String> getArgs(Iterable<Match> allMatch, String defaultArg) {
   }
 
   for (Match match in allMatch) {
-    String arg = match.input.substring(match.start + 1, match.end - 1);
+    String arg = match.group(1).toString();
     if (!args.contains(arg)) {
       args.add(arg);
     }
@@ -28,9 +29,17 @@ String normalizedSpecialCharacters(String message) {
 
 String normalizedJsonMessage(String message) {
   if (null != message) {
-    return message;
+    return appendDollarSignToArgs(message);
   }
   return null;
+}
+
+String appendDollarSignToArgs(String message) {
+  // Add a $ before all arguments that're not already preceded by a $.
+  final replaced = message.replaceAllMapped(ARG_REPLACE_REG_EXP, (match) {
+    return '\$${match.group(0)}';
+  });
+  return replaced;
 }
 
 String generateArg(arg) {
@@ -98,7 +107,7 @@ String extraArgsFromMessage(String message) {
     if (i != 0) {
       builder.write(', ');
     }
-    builder.write('\$${args[i]}');
+    builder.write(args[i]);
   }
   return builder.toString();
 }

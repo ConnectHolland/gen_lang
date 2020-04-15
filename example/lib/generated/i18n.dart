@@ -22,10 +22,11 @@ class S {
 
     return initializeMessages(localeName).then((bool _) {
       Intl.defaultLocale = localeName;
-      return new S();
+      return S();
     });
   }
   
+  // ignore_for_file: type_annotate_public_apis
   String genderMessage(targetGender, name) {
     return Intl.gender(targetGender,
         male: "Hi ${name}, He is boy.",
