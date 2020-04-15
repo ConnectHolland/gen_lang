@@ -26,7 +26,7 @@ class S {
 
     return initializeMessages(localeName).then((bool _) {
       Intl.defaultLocale = localeName;
-      return new S();
+      return S();
     });
   }
   
