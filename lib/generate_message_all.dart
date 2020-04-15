@@ -73,7 +73,7 @@ class \$$locale extends MessageLookupByLibrary {
   String get localeName => '$locale';
   
   @override
-  final Map<String, Function> messages = {
+  final Map<String, dynamic> messages = {
 $message
   };
 }
