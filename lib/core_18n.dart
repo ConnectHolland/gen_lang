@@ -8,6 +8,7 @@ import 'package:gen_lang/print_tool.dart';
 import 'package:gen_lang/extra_json_file_tool.dart';
 
 import 'package:path/path.dart' as path;
+import 'package:recase/recase.dart';
 
 class I18nOption {
   String sourceDir;
@@ -93,7 +94,7 @@ void _handleGenerateMessageAllDart(
     }
 
     for (MapEntry<String, Message> jsonKeyEntry in jsonKeyMap.entries) {
-      String jsonKey = jsonKeyEntry.key;
+      String jsonKey = jsonKeyEntry.key.camelCase;
       Message message = jsonKeyEntry.value;
 
       switch (message.messageKey.type) {
@@ -169,7 +170,7 @@ void _handleGenerateI18nDart(
 
   // 1. Generate getters
   for (MapEntry<String, Message> entity in defaultKeyMap.entries) {
-    String jsonKey = entity.key;
+    String jsonKey = entity.key.camelCase;
     Message message = entity.value;
 
     switch (message.messageKey.type) {
