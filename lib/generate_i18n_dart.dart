@@ -30,6 +30,7 @@ class S {
     });
   }
   
+  // ignore_for_file: type_annotate_public_apis
 $getters
 }
 
