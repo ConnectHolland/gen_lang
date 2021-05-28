@@ -3,7 +3,7 @@ RegExp ARG_REPLACE_REG_EXP = RegExp(r'(?<!\$){\w+}');
 const String DEFAULT_PLURAL_ARGS = 'howMany';
 const String DEFAULT_GENDER_ARG = 'targetGender';
 
-List<String> getArgs(Iterable<Match> allMatch, String defaultArg) {
+List<String> getArgs(Iterable<Match> allMatch, String? defaultArg) {
   List<String> args = [];
   if (null != defaultArg) {
     args.add(defaultArg);
@@ -19,7 +19,7 @@ List<String> getArgs(Iterable<Match> allMatch, String defaultArg) {
   return args;
 }
 
-String normalizedSpecialCharacters(String message) {
+String? normalizedSpecialCharacters(String message) {
   if (null != message) {
     String normalizedJson = message.replaceAll(r"\", r"\\");
     return normalizedJson.replaceAll(r'\\"', r'\\\"');
@@ -27,7 +27,7 @@ String normalizedSpecialCharacters(String message) {
   return null;
 }
 
-String normalizedJsonMessage(String message) {
+String? normalizedJsonMessage(String? message) {
   if (null != message) {
     return appendDollarSignToArgs(message);
   }
@@ -46,11 +46,11 @@ String generateArg(arg) {
   return null != arg ? '"$arg"' : 'null';
 }
 
-String extraArgsFromGender(String male, String female, String other) {
-  List<String> plurals = [male, female, other];
+String extraArgsFromGender(String? male, String? female, String? other) {
+  List<String?> plurals = [male, female, other];
   Iterable<Match> theMostMatch = [];
 
-  for (String plural in plurals) {
+  for (String? plural in plurals) {
     if (null != plural) {
       Iterable<Match> allMatch = ARG_REG_EXP.allMatches(plural);
       if (null == theMostMatch ||
@@ -72,12 +72,12 @@ String extraArgsFromGender(String male, String female, String other) {
   return builder.toString();
 }
 
-String extraArgsFromPlural(String zero, String one, String two, String few,
-    String many, String other) {
-  List<String> plurals = [zero, one, two, few, many, other];
+String extraArgsFromPlural(String? zero, String? one, String? two, String? few,
+    String? many, String? other) {
+  List<String?> plurals = [zero, one, two, few, many, other];
   Iterable<Match> theMostMatch = [];
 
-  for (String plural in plurals) {
+  for (String? plural in plurals) {
     if (null != plural) {
       Iterable<Match> allMatch = ARG_REG_EXP.allMatches(plural);
       if (null == theMostMatch ||

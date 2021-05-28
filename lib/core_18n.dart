@@ -11,9 +11,9 @@ import 'package:path/path.dart' as path;
 import 'package:recase/recase.dart';
 
 class I18nOption {
-  String sourceDir;
-  String templateLocale;
-  String outputDir;
+  String? sourceDir;
+  String? templateLocale;
+  String? outputDir;
 
   @override
   String toString() {
@@ -33,7 +33,7 @@ void handleGenerateI18nFiles(I18nOption option) async {
   List<FileSystemEntity> files =
       await dirContents(Directory(path.join(current.path, option.sourceDir)));
   Map<String, FileSystemEntity> validFilesMap = getValidStringFileMap(files);
-  FileSystemEntity defaultTemplateLang =
+  FileSystemEntity? defaultTemplateLang =
       getDefaultTemplateLang(validFilesMap, option.templateLocale);
   if (null != defaultTemplateLang) {
     Map<String, Message> defaultJsonKeyMessageMap =
@@ -100,11 +100,11 @@ void _handleGenerateMessageAllDart(
       switch (message.messageKey.type) {
         case MessageType.message:
           {
-            if (hasArgsInMessage(message.message)) {
+            if (hasArgsInMessage(message.message!)) {
               messageBuilder.writeln(generateKeyWithValue(
                   jsonKey,
                   generateMessageFunction(
-                      extraArgsFromMessage(message.message), message.message)));
+                      extraArgsFromMessage(message.message!), message.message)));
             } else {
               messageBuilder.writeln(generateKeyWithValue(
                   jsonKey, generateSimpleMessage(message.message)));
@@ -176,9 +176,9 @@ void _handleGenerateI18nDart(
     switch (message.messageKey.type) {
       case MessageType.message:
         {
-          if (hasArgsInMessage(message.message)) {
+          if (hasArgsInMessage(message.message!)) {
             getterBuilder.writeln(generateGetterMessageWithArgsFunction(jsonKey,
-                message.message, extraArgsFromMessage(message.message)));
+                message.message, extraArgsFromMessage(message.message!)));
           } else {
             getterBuilder.writeln(
                 generateGetterSimpleMessageFunction(jsonKey, message.message));
