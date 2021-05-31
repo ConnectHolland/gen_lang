@@ -19,7 +19,7 @@ Map<String, LibraryLoader> _deferredLibraries = {
 $deferredLibraries
 };
 
-MessageLookupByLibrary _findExact(String localeName) {
+MessageLookupByLibrary? _findExact(String localeName) {
   switch (localeName) {
 $findExacts
     default:
@@ -53,7 +53,7 @@ bool _messagesExistFor(String locale) {
   }
 }
 
-MessageLookupByLibrary _findGeneratedMessagesFor(String locale) {
+MessageLookupByLibrary? _findGeneratedMessagesFor(String locale) {
   final actualLocale = Intl.verifiedLocale(locale, _messagesExistFor,
       onFailure: (_) => null);
   if (actualLocale == null) return null;
@@ -92,8 +92,8 @@ String generateMessageFunction(String args, String? message) {
   return '''($args) => "${normalizedJsonMessage(message)}"''';
 }
 
-String generatePluralFunction(String args, String? zero, String? one, String? two,
-    String? few, String? many, String? other) {
+String generatePluralFunction(
+    String args, String? zero, String? one, String? two, String? few, String? many, String? other) {
   var zeroArg = generateArg(normalizedJsonMessage(zero));
   var oneArg = generateArg(normalizedJsonMessage(one));
   var twoArg = generateArg(normalizedJsonMessage(two));
@@ -104,8 +104,7 @@ String generatePluralFunction(String args, String? zero, String? one, String? tw
   return '''($args) => "\${Intl.pluralLogic(howMany, zero: $zeroArg, one: $oneArg, two:$twoArg, few:$fewArg, many:$manyArg, other: $otherArg)}"''';
 }
 
-String generateGenderFunction(
-    String args, String? male, String? female, String? other) {
+String generateGenderFunction(String args, String? male, String? female, String? other) {
   var maleArg = generateArg(normalizedJsonMessage(male));
   var femaleArg = generateArg(normalizedJsonMessage(female));
   var otherArg = generateArg(normalizedJsonMessage(other));
@@ -127,8 +126,7 @@ bool hasArgsInMessage(String message) {
   return ARG_REG_EXP.hasMatch(message);
 }
 
-bool hasArgsInPlural(String zero, String one, String two, String few,
-    String many, String other) {
+bool hasArgsInPlural(String zero, String one, String two, String few, String many, String other) {
   List<String> plurals = [zero, one, two, few, many, other];
 
   for (String plural in plurals) {
