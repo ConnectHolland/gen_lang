@@ -60,7 +60,7 @@ $supportedLocale
   }
 
   Locale _resolve(Locale? locale, Locale? fallback, Iterable<Locale> supported) {
-    if (locale == null || !isSupported(locale)) {
+    if (locale == null) {
       return fallback ?? supported.first;
     }
 
