@@ -1,4 +1,4 @@
-import 'package:gen_lang/extra_json_message_tool.dart';
+import 'extra_json_message_tool.dart';
 
 String generateI18nDart(String getters, String supportedLocale) {
   return '''
@@ -16,7 +16,7 @@ class S {
   static const GeneratedLocalizationsDelegate delegate = GeneratedLocalizationsDelegate();
 
   static S of(BuildContext context) {
-    return Localizations.of<S>(context, S);
+    return Localizations.of<S>(context, S)!;
   }
   
   static Future<S> load(Locale locale) {
@@ -43,8 +43,8 @@ $supportedLocale
     ];
   }
 
-  LocaleListResolutionCallback listResolution({Locale fallback}) {
-    return (List<Locale> locales, Iterable<Locale> supported) {
+  LocaleListResolutionCallback listResolution({Locale? fallback}) {
+    return (List<Locale>? locales, Iterable<Locale> supported) {
       if (locales == null || locales.isEmpty) {
         return fallback ?? supported.first;
       } else {
@@ -53,13 +53,13 @@ $supportedLocale
     };
   }
 
-  LocaleResolutionCallback resolution({Locale fallback}) {
-    return (Locale locale, Iterable<Locale> supported) {
+  LocaleResolutionCallback resolution({Locale? fallback}) {
+    return (Locale? locale, Iterable<Locale> supported) {
       return _resolve(locale, fallback, supported);
     };
   }
 
-  Locale _resolve(Locale locale, Locale fallback, Iterable<Locale> supported) {
+  Locale _resolve(Locale? locale, Locale? fallback, Iterable<Locale> supported) {
     if (locale == null || !isSupported(locale)) {
       return fallback ?? supported.first;
     }
@@ -100,8 +100,7 @@ String generateGetterSimpleMessageFunction(String jsonKey, String message) {
 ''';
 }
 
-String generateGetterMessageWithArgsFunction(
-    String jsonKey, String message, String args) {
+String generateGetterMessageWithArgsFunction(String jsonKey, String message, String args) {
   return '''
   String $jsonKey($args) {
     return Intl.message("${normalizedJsonMessage(message)}", name: '$jsonKey', args: [$args]);
@@ -109,8 +108,8 @@ String generateGetterMessageWithArgsFunction(
 ''';
 }
 
-String generateGetterPluralFunction(String jsonKey, String args, String zero,
-    String one, String two, String few, String many, String other) {
+String generateGetterPluralFunction(String jsonKey, String args, String zero, String one,
+    String two, String few, String many, String other) {
   var zeroArg = generateArg(normalizedJsonMessage(zero));
   var oneArg = generateArg(normalizedJsonMessage(one));
   var twoArg = generateArg(normalizedJsonMessage(two));
