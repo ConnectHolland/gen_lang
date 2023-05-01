@@ -69,7 +69,9 @@ void _handleGenerateI18nKeysDart(String path, Map<String, Message> defaultKeyMap
     generatedFile.createSync(recursive: true);
   }
 
-  final String fileContents = generateI18nKeysDart(defaultKeyMap.keys.toList());
+  final String fileContents = generateI18nKeysDart(
+    defaultKeyMap.keys.map((key) => key.camelCase).toList(),
+  );
 
   // Generate i18n_keys.dart
   generatedFile.writeAsStringSync(fileContents);
