@@ -9,6 +9,7 @@ import 'dart:async';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 
+import 'i18n_keys.dart';
 import 'messages_all.dart';
 
 class S {
@@ -81,8 +82,7 @@ $supportedLocale
   }
 
   @override
-  bool isSupported(Locale locale) =>
-    locale != null && supportedLocales.contains(locale);
+  bool isSupported(Locale locale) => supportedLocales.contains(locale);
 
   @override
   bool shouldReload(GeneratedLocalizationsDelegate old) => false;
@@ -95,7 +95,7 @@ $supportedLocale
 String generateGetterSimpleMessageFunction(String jsonKey, String message) {
   return '''
   String get $jsonKey {
-    return Intl.message("${normalizedJsonMessage(message)}", name: '$jsonKey');
+    return Intl.message("${normalizedJsonMessage(message)}", name: I18nKeys.$jsonKey);
   }
 ''';
 }
@@ -103,7 +103,7 @@ String generateGetterSimpleMessageFunction(String jsonKey, String message) {
 String generateGetterMessageWithArgsFunction(String jsonKey, String message, String args) {
   return '''
   String $jsonKey($args) {
-    return Intl.message("${normalizedJsonMessage(message)}", name: '$jsonKey', args: [$args]);
+    return Intl.message("${normalizedJsonMessage(message)}", name: I18nKeys.$jsonKey, args: [$args]);
   }
 ''';
 }
@@ -126,7 +126,7 @@ String generateGetterPluralFunction(String jsonKey, String args, String zero, St
         few: $fewArg,
         many: $manyArg,
         other: $otherArg,
-        name: '$jsonKey',
+        name: I18nKeys.$jsonKey,
         args: [$args]);
   }
 ''';
@@ -144,7 +144,7 @@ String generateGetterGenderFunction(
         male: $maleArg,
         female: $femaleArg,
         other: $otherArg,
-        name: '$jsonKey',
+        name: I18nKeys.$jsonKey,
         args: [$args]);
   }
 ''';

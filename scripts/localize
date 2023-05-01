@@ -1,0 +1,17 @@
+#!/bin/bash
+
+declare -a LANGUAGES=("en-us" "nl" "de" "fr" "es" "pt")
+
+SCRIPT_PATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
+WORKSPACE_PATH="$(dirname "$SCRIPT_PATH")"
+LOCALIZATIONS_PATH="$WORKSPACE_PATH/example/res/string"
+I18N_SRC_PATH="$WORKSPACE_PATH/example/lib/generated"
+
+echo "Generating translations"
+
+pushd $WORKSPACE_PATH
+# Must be run from apps root folder that contains the pubspec.yaml file
+flutter pub run gen_lang:generate --source-dir $LOCALIZATIONS_PATH --output-dir $I18N_SRC_PATH --template-locale "en"
+popd
+
+echo "Finished!"

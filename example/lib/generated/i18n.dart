@@ -5,6 +5,7 @@ import 'dart:async';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 
+import 'i18n_keys.dart';
 import 'messages_all.dart';
 
 class S {
@@ -12,7 +13,7 @@ class S {
   static const GeneratedLocalizationsDelegate delegate = GeneratedLocalizationsDelegate();
 
   static S of(BuildContext context) {
-    return Localizations.of<S>(context, S);
+    return Localizations.of<S>(context, S)!;
   }
   
   static Future<S> load(Locale locale) {
@@ -32,16 +33,16 @@ class S {
         male: "Hi ${name}, He is boy.",
         female: "Hi ${name}, She is girl.",
         other: "Hi ${name}, he/she is boy/girl.",
-        name: 'genderMessage',
+        name: I18nKeys.genderMessage,
         args: [targetGender, name]);
   }
 
   String get locale {
-    return Intl.message("English", name: 'locale');
+    return Intl.message("English", name: I18nKeys.locale);
   }
 
   String messageWithParams(yourName) {
-    return Intl.message("Hi ${yourName}, Welcome you!", name: 'messageWithParams', args: [yourName]);
+    return Intl.message("Hi ${yourName}, Welcome you!", name: I18nKeys.messageWithParams, args: [yourName]);
   }
 
   String pluralMessage(howMany, interviewerName) {
@@ -52,16 +53,16 @@ class S {
         few: null,
         many: null,
         other: "Hi ${interviewerName}, I have ${howMany} years of working experience.",
-        name: 'pluralMessage',
+        name: I18nKeys.pluralMessage,
         args: [howMany, interviewerName]);
   }
 
   String get simpleMessage {
-    return Intl.message("This is a simple Message", name: 'simpleMessage');
+    return Intl.message("This is a simple Message", name: I18nKeys.simpleMessage);
   }
 
   String get specialCharactersMessage {
-    return Intl.message("Special Characters Nice Developer's \"Message\"\n Next Line", name: 'specialCharactersMessage');
+    return Intl.message("Special Characters Nice Developer's \"Message\"\n Next Line", name: I18nKeys.specialCharactersMessage);
   }
 
 
@@ -79,8 +80,8 @@ class GeneratedLocalizationsDelegate extends LocalizationsDelegate<S> {
     ];
   }
 
-  LocaleListResolutionCallback listResolution({Locale fallback}) {
-    return (List<Locale> locales, Iterable<Locale> supported) {
+  LocaleListResolutionCallback listResolution({Locale? fallback}) {
+    return (List<Locale>? locales, Iterable<Locale> supported) {
       if (locales == null || locales.isEmpty) {
         return fallback ?? supported.first;
       } else {
@@ -89,14 +90,14 @@ class GeneratedLocalizationsDelegate extends LocalizationsDelegate<S> {
     };
   }
 
-  LocaleResolutionCallback resolution({Locale fallback}) {
-    return (Locale locale, Iterable<Locale> supported) {
+  LocaleResolutionCallback resolution({Locale? fallback}) {
+    return (Locale? locale, Iterable<Locale> supported) {
       return _resolve(locale, fallback, supported);
     };
   }
 
-  Locale _resolve(Locale locale, Locale fallback, Iterable<Locale> supported) {
-    if (locale == null || !isSupported(locale)) {
+  Locale _resolve(Locale? locale, Locale? fallback, Iterable<Locale> supported) {
+    if (locale == null) {
       return fallback ?? supported.first;
     }
 
@@ -117,8 +118,7 @@ class GeneratedLocalizationsDelegate extends LocalizationsDelegate<S> {
   }
 
   @override
-  bool isSupported(Locale locale) =>
-    locale != null && supportedLocales.contains(locale);
+  bool isSupported(Locale locale) => supportedLocales.contains(locale);
 
   @override
   bool shouldReload(GeneratedLocalizationsDelegate old) => false;

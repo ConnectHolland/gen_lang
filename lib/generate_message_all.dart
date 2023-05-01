@@ -12,6 +12,8 @@ import 'package:intl/message_lookup_by_library.dart';
 // ignore: implementation_imports
 import 'package:intl/src/intl_helpers.dart';
 
+import 'i18n_keys.dart';
+
 $createdMessageLookup
 
 typedef LibraryLoader = Future<dynamic> Function();
@@ -81,7 +83,7 @@ $message
 }
 
 String generateKeyWithValue(String key, String value) {
-  return '''\t\t"$key" : $value,''';
+  return '''\t\tI18nKeys.$key : $value,''';
 }
 
 String generateSimpleMessage(String message) {

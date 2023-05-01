@@ -1,9 +1,10 @@
 name: gen_lang_example
 description: Demonstrates how to use the gen_lang plugin.
-publish_to: 'none'
+publish_to: "none"
 
 environment:
-  sdk: ">=2.0.0-dev.68.0 <3.0.0"
+  sdk: ">=2.19.4 <3.0.0"
+  flutter: ">=3.7.0"
 
 dependencies:
   flutter:

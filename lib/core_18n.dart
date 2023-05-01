@@ -1,14 +1,16 @@
 library core_18n;
 
 import 'dart:io';
+
+import 'package:gen_lang/extra_json_file_tool.dart';
 import 'package:gen_lang/extra_json_message_tool.dart';
 import 'package:gen_lang/generate_i18n_dart.dart';
 import 'package:gen_lang/generate_message_all.dart';
 import 'package:gen_lang/print_tool.dart';
-import 'package:gen_lang/extra_json_file_tool.dart';
-
 import 'package:path/path.dart' as path;
 import 'package:recase/recase.dart';
+
+import 'generate_i18n_keys.dart';
 
 class I18nOption {
   String sourceDir;
@@ -38,34 +40,43 @@ void handleGenerateI18nFiles(I18nOption option) async {
   if (null != defaultTemplateLang) {
     Map<String, Message> defaultJsonKeyMessageMap =
         await generateJsonKeyMessageMap(File(defaultTemplateLang.path));
-//    printInfo(defaultJsonKeyMessageMap.toString());
+    // printInfo(defaultJsonKeyMessageMap.toString());
 //    printInfo('outputDir: ${option.outputDir}');
 
     String defaultLang = path.basename(getLocale(defaultTemplateLang.path));
 
+    // Generate i18n_keys.dart
+    _handleGenerateI18nKeysDart(
+      path.join(current.path, option.outputDir, 'i18n_keys.dart'),
+      defaultJsonKeyMessageMap,
+    );
+
     // Generate messages_all.dart
-    _handleGenerateMessageAllDart(
-        path.join(current.path, option.outputDir, 'messages_all.dart'),
-        defaultLang,
-        defaultJsonKeyMessageMap,
-        validFilesMap);
+    _handleGenerateMessageAllDart(path.join(current.path, option.outputDir, 'messages_all.dart'),
+        defaultLang, defaultJsonKeyMessageMap, validFilesMap);
 
     // Generate i18n.dart
-    _handleGenerateI18nDart(
-        path.join(current.path, option.outputDir, 'i18n.dart'),
-        defaultLang,
-        defaultJsonKeyMessageMap,
-        validFilesMap);
+    _handleGenerateI18nDart(path.join(current.path, option.outputDir, 'i18n.dart'), defaultLang,
+        defaultJsonKeyMessageMap, validFilesMap);
 
     printInfo('Finished to generate 2 files.');
   }
 }
 
-void _handleGenerateMessageAllDart(
-    String path,
-    String defaultLang,
-    Map<String, Message> defaultKeyMap,
-    Map<String, FileSystemEntity> validFilesMap) async {
+void _handleGenerateI18nKeysDart(String path, Map<String, Message> defaultKeyMap) async {
+  File generatedFile = File(path);
+  if (!generatedFile.existsSync()) {
+    generatedFile.createSync(recursive: true);
+  }
+
+  final String fileContents = generateI18nKeysDart(defaultKeyMap.keys.toList());
+
+  // Generate i18n_keys.dart
+  generatedFile.writeAsStringSync(fileContents);
+}
+
+void _handleGenerateMessageAllDart(String path, String defaultLang,
+    Map<String, Message> defaultKeyMap, Map<String, FileSystemEntity> validFilesMap) async {
   File generatedFile = File(path);
   if (!generatedFile.existsSync()) {
     generatedFile.createSync(recursive: true);
@@ -101,13 +112,11 @@ void _handleGenerateMessageAllDart(
         case MessageType.message:
           {
             if (hasArgsInMessage(message.message)) {
-              messageBuilder.writeln(generateKeyWithValue(
-                  jsonKey,
-                  generateMessageFunction(
-                      extraArgsFromMessage(message.message), message.message)));
+              messageBuilder.writeln(generateKeyWithValue(jsonKey,
+                  generateMessageFunction(extraArgsFromMessage(message.message), message.message)));
             } else {
-              messageBuilder.writeln(generateKeyWithValue(
-                  jsonKey, generateSimpleMessage(message.message)));
+              messageBuilder
+                  .writeln(generateKeyWithValue(jsonKey, generateSimpleMessage(message.message)));
             }
             break;
           }
@@ -116,8 +125,8 @@ void _handleGenerateMessageAllDart(
             messageBuilder.writeln(generateKeyWithValue(
                 jsonKey,
                 generatePluralFunction(
-                    extraArgsFromPlural(message.zero, message.one, message.two,
-                        message.few, message.many, message.other),
+                    extraArgsFromPlural(message.zero, message.one, message.two, message.few,
+                        message.many, message.other),
                     message.zero,
                     message.one,
                     message.two,
@@ -131,8 +140,7 @@ void _handleGenerateMessageAllDart(
             messageBuilder.writeln(generateKeyWithValue(
                 jsonKey,
                 generateGenderFunction(
-                    extraArgsFromGender(
-                        message.male, message.female, message.genderOther),
+                    extraArgsFromGender(message.male, message.female, message.genderOther),
                     message.male,
                     message.female,
                     message.genderOther)));
@@ -143,8 +151,8 @@ void _handleGenerateMessageAllDart(
 
     deferredLibrariesBuilder.writeln(generateDeferredLibrariesLibrary(locale));
     findExactBuilder.writeln(generateFindExact(locale));
-    createMessageLookupClassBuilder.writeln(
-        generateMessageLookup(locale, message: messageBuilder.toString()));
+    createMessageLookupClassBuilder
+        .writeln(generateMessageLookup(locale, message: messageBuilder.toString()));
   }
 
   // 5. generate messages_all.dart
@@ -155,10 +163,7 @@ void _handleGenerateMessageAllDart(
   ));
 }
 
-void _handleGenerateI18nDart(
-    String path,
-    String defaultLang,
-    Map<String, Message> defaultKeyMap,
+void _handleGenerateI18nDart(String path, String defaultLang, Map<String, Message> defaultKeyMap,
     Map<String, FileSystemEntity> validFilesMap) {
   File generatedFile = File(path);
   if (!generatedFile.existsSync()) {
@@ -177,11 +182,10 @@ void _handleGenerateI18nDart(
       case MessageType.message:
         {
           if (hasArgsInMessage(message.message)) {
-            getterBuilder.writeln(generateGetterMessageWithArgsFunction(jsonKey,
-                message.message, extraArgsFromMessage(message.message)));
+            getterBuilder.writeln(generateGetterMessageWithArgsFunction(
+                jsonKey, message.message, extraArgsFromMessage(message.message)));
           } else {
-            getterBuilder.writeln(
-                generateGetterSimpleMessageFunction(jsonKey, message.message));
+            getterBuilder.writeln(generateGetterSimpleMessageFunction(jsonKey, message.message));
           }
           break;
         }
@@ -189,8 +193,8 @@ void _handleGenerateI18nDart(
         {
           getterBuilder.writeln(generateGetterPluralFunction(
               jsonKey,
-              extraArgsFromPlural(message.zero, message.one, message.two,
-                  message.few, message.many, message.other),
+              extraArgsFromPlural(
+                  message.zero, message.one, message.two, message.few, message.many, message.other),
               message.zero,
               message.one,
               message.two,
@@ -203,8 +207,7 @@ void _handleGenerateI18nDart(
         {
           getterBuilder.writeln(generateGetterGenderFunction(
               jsonKey,
-              extraArgsFromGender(
-                  message.male, message.female, message.genderOther),
+              extraArgsFromGender(message.male, message.female, message.genderOther),
               message.male,
               message.female,
               message.genderOther));
@@ -223,6 +226,6 @@ void _handleGenerateI18nDart(
   }
 
   // 3. Generate i18n.dart
-  generatedFile.writeAsStringSync(generateI18nDart(
-      getterBuilder.toString(), supportedLangBuilder.toString()));
+  generatedFile.writeAsStringSync(
+      generateI18nDart(getterBuilder.toString(), supportedLangBuilder.toString()));
 }
