@@ -31,10 +31,11 @@ class S {
     });
   }
 
-  String fromKey(String key) {
-    final dynamic self = this;
-    print(self[key]);
-    return '';
+  /// Returns the translation for the given key. An optional list with arguments
+  /// can be passed in for translations that contain variable placeholders.
+  /// Translating gender-specific or plural strings is currently not supported.
+  String trans(String key, {List<Object>? args}) {
+    return Intl.message("", name: key, args: args);
   }
 
   @override
