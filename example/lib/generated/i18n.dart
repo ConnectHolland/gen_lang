@@ -26,6 +26,17 @@ class S {
       return S();
     });
   }
+
+  String fromKey(String key) {
+    final dynamic self = this;
+    print(self[key]);
+    return '';
+  }
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) {
+    return () => print('You tried to fetch: ${invocation.positionalArguments.first}');
+  }
   
   // ignore_for_file: type_annotate_public_apis
   String genderMessage(targetGender, name) {
