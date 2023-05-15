@@ -13,9 +13,9 @@ import 'package:recase/recase.dart';
 import 'generate_i18n_keys.dart';
 
 class I18nOption {
-  String sourceDir;
-  String templateLocale;
-  String outputDir;
+  String? sourceDir;
+  String? templateLocale;
+  String? outputDir;
 
   @override
   String toString() {
@@ -35,7 +35,7 @@ void handleGenerateI18nFiles(I18nOption option) async {
   List<FileSystemEntity> files =
       await dirContents(Directory(path.join(current.path, option.sourceDir)));
   Map<String, FileSystemEntity> validFilesMap = getValidStringFileMap(files);
-  FileSystemEntity defaultTemplateLang =
+  FileSystemEntity? defaultTemplateLang =
       getDefaultTemplateLang(validFilesMap, option.templateLocale);
   if (null != defaultTemplateLang) {
     Map<String, Message> defaultJsonKeyMessageMap =
@@ -113,12 +113,14 @@ void _handleGenerateMessageAllDart(String path, String defaultLang,
       switch (message.messageKey.type) {
         case MessageType.message:
           {
-            if (hasArgsInMessage(message.message)) {
-              messageBuilder.writeln(generateKeyWithValue(jsonKey,
-                  generateMessageFunction(extraArgsFromMessage(message.message), message.message)));
+            if (hasArgsInMessage(message.message!)) {
+              messageBuilder.writeln(generateKeyWithValue(
+                  jsonKey,
+                  generateMessageFunction(
+                      extraArgsFromMessage(message.message), message.message!)));
             } else {
               messageBuilder
-                  .writeln(generateKeyWithValue(jsonKey, generateSimpleMessage(message.message)));
+                  .writeln(generateKeyWithValue(jsonKey, generateSimpleMessage(message.message!)));
             }
             break;
           }
@@ -183,11 +185,11 @@ void _handleGenerateI18nDart(String path, String defaultLang, Map<String, Messag
     switch (message.messageKey.type) {
       case MessageType.message:
         {
-          if (hasArgsInMessage(message.message)) {
+          if (hasArgsInMessage(message.message!)) {
             getterBuilder.writeln(generateGetterMessageWithArgsFunction(
-                jsonKey, message.message, extraArgsFromMessage(message.message)));
+                jsonKey, message.message!, extraArgsFromMessage(message.message!)));
           } else {
-            getterBuilder.writeln(generateGetterSimpleMessageFunction(jsonKey, message.message));
+            getterBuilder.writeln(generateGetterSimpleMessageFunction(jsonKey, message.message!));
           }
           break;
         }

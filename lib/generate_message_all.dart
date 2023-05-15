@@ -95,7 +95,7 @@ String generateMessageFunction(String args, String message) {
 }
 
 String generatePluralFunction(
-    String args, String zero, String one, String two, String few, String many, String other) {
+    String args, String? zero, String? one, String? two, String? few, String? many, String? other) {
   var zeroArg = generateArg(normalizedJsonMessage(zero));
   var oneArg = generateArg(normalizedJsonMessage(one));
   var twoArg = generateArg(normalizedJsonMessage(two));
@@ -106,7 +106,7 @@ String generatePluralFunction(
   return '''($args) => "\${Intl.pluralLogic(howMany, zero: $zeroArg, one: $oneArg, two:$twoArg, few:$fewArg, many:$manyArg, other: $otherArg)}"''';
 }
 
-String generateGenderFunction(String args, String male, String female, String other) {
+String generateGenderFunction(String args, String? male, String? female, String? other) {
   var maleArg = generateArg(normalizedJsonMessage(male));
   var femaleArg = generateArg(normalizedJsonMessage(female));
   var otherArg = generateArg(normalizedJsonMessage(other));
@@ -128,10 +128,11 @@ bool hasArgsInMessage(String message) {
   return ARG_REG_EXP.hasMatch(message);
 }
 
-bool hasArgsInPlural(String zero, String one, String two, String few, String many, String other) {
-  List<String> plurals = [zero, one, two, few, many, other];
+bool hasArgsInPlural(
+    String? zero, String? one, String? two, String? few, String? many, String? other) {
+  List<String?> plurals = [zero, one, two, few, many, other];
 
-  for (String plural in plurals) {
+  for (String? plural in plurals) {
     if (null != plural && ARG_REG_EXP.hasMatch(plural)) {
       return true;
     }

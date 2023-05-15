@@ -120,8 +120,8 @@ String generateGetterMessageWithArgsFunction(String jsonKey, String message, Str
 ''';
 }
 
-String generateGetterPluralFunction(String jsonKey, String args, String zero, String one,
-    String two, String few, String many, String other) {
+String generateGetterPluralFunction(String jsonKey, String args, String? zero, String? one,
+    String? two, String? few, String? many, String? other) {
   var zeroArg = generateArg(normalizedJsonMessage(zero));
   var oneArg = generateArg(normalizedJsonMessage(one));
   var twoArg = generateArg(normalizedJsonMessage(two));
@@ -145,7 +145,7 @@ String generateGetterPluralFunction(String jsonKey, String args, String zero, St
 }
 
 String generateGetterGenderFunction(
-    String jsonKey, String args, String male, String female, String other) {
+    String jsonKey, String args, String? male, String? female, String? other) {
   var maleArg = generateArg(normalizedJsonMessage(male));
   var femaleArg = generateArg(normalizedJsonMessage(female));
   var otherArg = generateArg(normalizedJsonMessage(other));

@@ -1,28 +1,29 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:gen_lang/extra_json_message_tool.dart';
 import 'package:gen_lang/print_tool.dart';
 import 'package:path/path.dart' as path;
 
 class Message {
-  MessageKey messageKey;
+  late MessageKey messageKey;
 
   // Simple Message
-  String message;
+  String? message;
 
   // Plural
-  String zero;
-  String one;
-  String two;
-  String few;
-  String many;
-  String other;
+  String? zero;
+  String? one;
+  String? two;
+  String? few;
+  String? many;
+  String? other;
 
   // Gender
-  String male;
-  String female;
-  String genderOther;
+  String? male;
+  String? female;
+  String? genderOther;
 
   @override
   String toString() {
@@ -33,7 +34,7 @@ class Message {
 class MessageKey {
   String key;
   MessageType type;
-  SubType subType;
+  SubType? subType;
 
   MessageKey(this.key, this.type, this.subType);
 
@@ -73,8 +74,7 @@ Map<String, FileSystemEntity> getValidStringFileMap(files) {
 //      printInfo('Basename : ${path.basename(file.path)}');
 //      printInfo('locale : ${locale}');
     } else {
-      printWarning(
-          '$fileName does not match naming pattern [string_{locale}.json]');
+      printWarning('$fileName does not match naming pattern [string_{locale}.json]');
     }
   }
 
@@ -91,9 +91,11 @@ Future<List<FileSystemEntity>> dirContents(Directory dir) {
   return completer.future;
 }
 
-FileSystemEntity getDefaultTemplateLang(
-    Map<String, FileSystemEntity> validFilesMap, String lang) {
-  FileSystemEntity defaultFile = validFilesMap[lang];
+FileSystemEntity? getDefaultTemplateLang(
+  Map<String, FileSystemEntity> validFilesMap,
+  String? lang,
+) {
+  FileSystemEntity? defaultFile = validFilesMap[lang];
   if (defaultFile != null) {
     return defaultFile;
   }
@@ -120,7 +122,7 @@ Future<Map<String, Message>> generateJsonKeyMessageMap(File jsonFile) async {
     MessageKey _messageKey = getMessageKey(k);
     Message _message;
     if (keyMap.containsKey(_messageKey.key)) {
-      _message = keyMap[_messageKey.key];
+      _message = keyMap[_messageKey.key]!;
     } else {
       _message = Message();
       _message.messageKey = _messageKey;
@@ -207,7 +209,7 @@ Future<Map<String, Message>> generateJsonKeyMessageMap(File jsonFile) async {
 MessageKey getMessageKey(String jsonKey) {
   String key;
   MessageType type;
-  SubType subType;
+  SubType? subType;
 
   if (jsonKey.endsWith('One')) {
     key = jsonKey.substring(0, jsonKey.lastIndexOf('One'));

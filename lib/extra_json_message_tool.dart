@@ -3,7 +3,7 @@ RegExp ARG_REPLACE_REG_EXP = RegExp(r'(?<!\$){\w+}');
 const String DEFAULT_PLURAL_ARGS = 'howMany';
 const String DEFAULT_GENDER_ARG = 'targetGender';
 
-List<String> getArgs(Iterable<Match> allMatch, String defaultArg) {
+List<String> getArgs(Iterable<Match> allMatch, String? defaultArg) {
   List<String> args = [];
   if (null != defaultArg) {
     args.add(defaultArg);
@@ -20,14 +20,11 @@ List<String> getArgs(Iterable<Match> allMatch, String defaultArg) {
 }
 
 String normalizedSpecialCharacters(String message) {
-  if (null != message) {
-    String normalizedJson = message.replaceAll(r"\", r"\\");
-    return normalizedJson.replaceAll(r'\\"', r'\\\"');
-  }
-  return null;
+  String normalizedJson = message.replaceAll(r"\", r"\\");
+  return normalizedJson.replaceAll(r'\\"', r'\\\"');
 }
 
-String normalizedJsonMessage(String message) {
+String? normalizedJsonMessage(String? message) {
   if (null != message) {
     return appendDollarSignToArgs(message);
   }
@@ -42,19 +39,18 @@ String appendDollarSignToArgs(String message) {
   return replaced;
 }
 
-String generateArg(arg) {
+String generateArg(dynamic arg) {
   return null != arg ? '"$arg"' : 'null';
 }
 
-String extraArgsFromGender(String male, String female, String other) {
-  List<String> plurals = [male, female, other];
+String extraArgsFromGender(String? male, String? female, String? other) {
+  List<String?> plurals = [male, female, other];
   Iterable<Match> theMostMatch = [];
 
-  for (String plural in plurals) {
+  for (String? plural in plurals) {
     if (null != plural) {
       Iterable<Match> allMatch = ARG_REG_EXP.allMatches(plural);
-      if (null == theMostMatch ||
-          (null != theMostMatch && allMatch.length > theMostMatch.length)) {
+      if (allMatch.length > theMostMatch.length) {
         theMostMatch = allMatch;
       }
     }
@@ -72,16 +68,15 @@ String extraArgsFromGender(String male, String female, String other) {
   return builder.toString();
 }
 
-String extraArgsFromPlural(String zero, String one, String two, String few,
-    String many, String other) {
-  List<String> plurals = [zero, one, two, few, many, other];
+String extraArgsFromPlural(
+    String? zero, String? one, String? two, String? few, String? many, String? other) {
+  List<String?> plurals = [zero, one, two, few, many, other];
   Iterable<Match> theMostMatch = [];
 
-  for (String plural in plurals) {
+  for (String? plural in plurals) {
     if (null != plural) {
       Iterable<Match> allMatch = ARG_REG_EXP.allMatches(plural);
-      if (null == theMostMatch ||
-          (null != theMostMatch && allMatch.length > theMostMatch.length)) {
+      if (allMatch.length > theMostMatch.length) {
         theMostMatch = allMatch;
       }
     }
@@ -99,9 +94,9 @@ String extraArgsFromPlural(String zero, String one, String two, String few,
   return builder.toString();
 }
 
-String extraArgsFromMessage(String message) {
+String extraArgsFromMessage(String? message) {
   StringBuffer builder = StringBuffer();
-  List<String> args = getArgs(ARG_REG_EXP.allMatches(message), null);
+  List<String> args = getArgs(ARG_REG_EXP.allMatches(message ?? ''), null);
 
   for (int i = 0; i < args.length; i++) {
     if (i != 0) {
